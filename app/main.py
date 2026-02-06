@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
-from app.db.database import engine, Base
-from app.models.user import User
-from app.models.debug_session import DebugSession, ErrorTracking  # Import debug models
+from .db.database import engine, Base
+from .models.user import User
+from .models.debug_session import DebugSession, ErrorTracking  # Import debug models
 
 # Create tables if they don't exist
 Base.metadata.create_all(bind=engine)
