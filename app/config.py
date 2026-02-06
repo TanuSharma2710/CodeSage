@@ -1,4 +1,8 @@
 from pydantic_settings import BaseSettings
+from pathlib import Path
+
+# Get the directory where this config.py file is located (app folder)
+APP_DIR = Path(__file__).resolve().parent
 
 
 class Settings(BaseSettings):
@@ -14,7 +18,7 @@ class Settings(BaseSettings):
     groq_api_key: str = ""
 
     class Config:
-        env_file = ".env"
+        env_file = APP_DIR / ".env"
 
 
 settings = Settings()
