@@ -1,14 +1,17 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ThemeToggle, { ThemeProvider } from '../components/ThemeToggle';
 import DiffViewer from '../components/DiffViewer';
-import { debugCodeAnonymous } from '../services/api';
+import { debuggerAPI, debugCodeAnonymous } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import './Debugger.css';
 
 const DebuggerContent = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { user } = useAuth();
     const [code, setCode] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [language, setLanguage] = useState('python');
@@ -16,6 +19,44 @@ const DebuggerContent = () => {
     const [result, setResult] = useState(null);
     const [error, setError] = useState('');
     const [languageWarning, setLanguageWarning] = useState('');
+    const [isPrefilled, setIsPrefilled] = useState(false);
+    const [expectedOutput, setExpectedOutput] = useState('');
+    const [showExpectedOutput, setShowExpectedOutput] = useState(false);
+
+    // Handle prefill data from Analysis page
+    useEffect(() => {
+        if (location.state?.prefillData) {
+            const data = location.state.prefillData;
+            setCode(data.code || '');
+            setErrorMessage(data.error_message || '');
+            setLanguage(data.language || 'python');
+            setIsPrefilled(true);
+
+            // If there's previous solution data, show it
+            if (data.diagnosis || data.fixed_code) {
+                // Parse wrong_lines and corrected_lines if they exist (stored as JSON strings)
+                let mistakes = [];
+                if (data.wrong_lines) {
+                    try {
+                        const wrongLines = JSON.parse(data.wrong_lines);
+                        mistakes = wrongLines.map(line => `Line was: ${line}`);
+                    } catch (e) {
+                        mistakes = [data.diagnosis || 'Error identified and fixed'];
+                    }
+                } else {
+                    mistakes = [data.diagnosis || 'Error identified and fixed'];
+                }
+
+                setResult({
+                    diagnosis: data.diagnosis,
+                    fixed_code: data.fixed_code,
+                    study_topics: data.study_topics ? JSON.parse(data.study_topics) : [],
+                    mistakes: mistakes,
+                    changed_lines: []
+                });
+            }
+        }
+    }, [location.state]);
 
     // Detect language from code patterns
     const detectLanguage = (codeText) => {
@@ -81,11 +122,19 @@ const DebuggerContent = () => {
         setResult(null);
 
         try {
-            const response = await debugCodeAnonymous({
+            const debugRequest = {
                 code,
                 error_message: errorMessage,
-                language
-            });
+                language,
+                ...(expectedOutput.trim() && { expected_output: expectedOutput })
+            };
+
+            // Use authenticated endpoint if logged in (saves to database)
+            // Otherwise use anonymous endpoint
+            const response = user
+                ? await debuggerAPI.analyzeCode(debugRequest)
+                : await debugCodeAnonymous(debugRequest);
+
             setResult(response);
         } catch (err) {
             setError(err.response?.data?.detail || 'Failed to analyze code. Please try again.');
@@ -164,6 +213,31 @@ const DebuggerContent = () => {
                                 onKeyDown={handleKeyDown}
                                 spellCheck="false"
                             />
+                        </div>
+
+                        {/* Optional Expected Output Section */}
+                        <div className="expected-output-section">
+                            <button
+                                type="button"
+                                className={`expected-output-toggle ${showExpectedOutput ? 'active' : ''}`}
+                                onClick={() => setShowExpectedOutput(!showExpectedOutput)}
+                            >
+                                <span className="toggle-icon">{showExpectedOutput ? '▼' : '▶'}</span>
+                                <span>Expected Output (Optional)</span>
+                                <span className="optional-badge">For Logical Errors</span>
+                            </button>
+                            {showExpectedOutput && (
+                                <div className="expected-output-content">
+                                    <textarea
+                                        className="expected-output-textarea"
+                                        placeholder="Expected: [1, 2, 3]&#10;Got: [3, 2, 1]"
+                                        value={expectedOutput}
+                                        onChange={(e) => setExpectedOutput(e.target.value)}
+                                        onKeyDown={handleKeyDown}
+                                        spellCheck="false"
+                                    />
+                                </div>
+                            )}
                         </div>
                         <button
                             className="analyze-btn"

@@ -7,13 +7,14 @@ class DebugRequest(BaseModel):
     code: str
     error_message: str
     language: str = "python"
+    expected_output: Optional[str] = None
 
 
 class CodeFix(BaseModel):
     line_number: int
-    original: str
-    fixed: str
-    explanation: str
+    original:str        
+    fixed:str 
+    explanation:str
 
 
 class DebugResponse(BaseModel):

@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Debugger from './pages/Debugger';
 import Study from './pages/Study';
+import Analysis from './pages/Analysis';
 import './App.css';
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
                     } />
                     <Route path="/analysis" element={
                         <ProtectedRoute>
-                            <div>Analysis Page - Coming Soon</div>
+                            <Analysis />
                         </ProtectedRoute>
                     } />
                 </Routes>
@@ -38,4 +39,5 @@ function App() {
 }
 
 export default App;
+
 

@@ -32,12 +32,32 @@ const DiffViewer = ({ originalCode, fixedCode, changedLines = [] }) => {
 
     // Copy full fixed code
     const handleCopyAll = async () => {
+        const textToCopy = fixedCode || '';
+        if (!textToCopy) {
+            console.warn('No code to copy');
+            return;
+        }
         try {
-            await navigator.clipboard.writeText(fixedCode);
+            await navigator.clipboard.writeText(textToCopy);
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
-            console.error('Failed to copy:', err);
+            // Fallback for older browsers or when clipboard API fails
+            console.error('Clipboard API failed, trying fallback:', err);
+            try {
+                const textArea = document.createElement('textarea');
+                textArea.value = textToCopy;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-9999px';
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            } catch (fallbackErr) {
+                console.error('Fallback copy also failed:', fallbackErr);
+            }
         }
     };
 
@@ -60,7 +80,7 @@ const DiffViewer = ({ originalCode, fixedCode, changedLines = [] }) => {
                         onClick={handleCopyAll}
                         title="Copy full code"
                     >
-                        📄 Copy All
+                        {copied ? '✓ Copied!' : '📄 Copy All'}
                     </button>
                 </div>
             </div>
