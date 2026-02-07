@@ -14,6 +14,7 @@ import {
     Filler
 } from 'chart.js';
 import { Bar, Line } from 'react-chartjs-2';
+import API_BASE_URL from '../config/apiBaseUrl';
 import './Analysis.css';
 
 // Register Chart.js components
@@ -56,7 +57,7 @@ const Analysis = () => {
         const fetchErrorHistory = async () => {
             try {
                 const token = localStorage.getItem('access_token');
-                const response = await fetch('http://localhost:8000/api/v1/analysis/error-history?limit=10', {
+                const response = await fetch(`${API_BASE_URL}/analysis/error-history?limit=10`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
@@ -78,7 +79,7 @@ const Analysis = () => {
             setLoading(true);
             try {
                 const token = localStorage.getItem('access_token');
-                const response = await fetch(`http://localhost:8000/api/v1/analysis/daily-errors?days=${days}`, {
+                const response = await fetch(`${API_BASE_URL}/analysis/daily-errors?days=${days}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
@@ -117,7 +118,7 @@ const Analysis = () => {
             setLoadingCounts(true);
             try {
                 const token = localStorage.getItem('access_token');
-                const response = await fetch(`http://localhost:8000/api/v1/analysis/session-error-counts/${selectedError.id}`, {
+                const response = await fetch(`${API_BASE_URL}/analysis/session-error-counts/${selectedError.id}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
@@ -139,7 +140,7 @@ const Analysis = () => {
     const handleStudyNow = async (debugSessionId) => {
         try {
             const token = localStorage.getItem('access_token');
-            const response = await fetch(`http://localhost:8000/api/v1/analysis/debug-session/${debugSessionId}`, {
+            const response = await fetch(`${API_BASE_URL}/analysis/debug-session/${debugSessionId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 

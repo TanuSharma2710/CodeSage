@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import API_BASE_URL from '../config/apiBaseUrl';
 import './Auth.css';
 
 const Login = () => {
@@ -31,7 +32,7 @@ const Login = () => {
         setError('');
 
         try {
-            const response = await fetch('http://localhost:8000/api/v1/auth/login', {
+            const response = await fetch(`${API_BASE_URL}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useEffect, useCallback } from 'react';
+import API_BASE_URL from '../config/apiBaseUrl';
 
 const AuthContext = createContext(null);
 
@@ -14,7 +15,7 @@ export const AuthProvider = ({ children }) => {
         }
 
         try {
-            const response = await fetch('http://localhost:8000/api/v1/auth/refresh-token', {
+            const response = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -41,7 +42,7 @@ export const AuthProvider = ({ children }) => {
     // Fetch user data with token
     const fetchUser = useCallback(async (token) => {
         try {
-            const response = await fetch('http://localhost:8000/api/v1/users/me', {
+            const response = await fetch(`${API_BASE_URL}/users/me`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -56,7 +57,7 @@ export const AuthProvider = ({ children }) => {
                 const newToken = await refreshAccessToken();
                 if (newToken) {
                     // Retry with new token
-                    const retryResponse = await fetch('http://localhost:8000/api/v1/users/me', {
+                    const retryResponse = await fetch(`${API_BASE_URL}/users/me`, {
                         headers: {
                             'Authorization': `Bearer ${newToken}`
                         }
@@ -117,7 +118,7 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         const accessToken = localStorage.getItem('access_token');
         try {
-            await fetch('http://localhost:8000/api/v1/auth/logout', {
+            await fetch(`${API_BASE_URL}/auth/logout`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const API_BASE_URL = 'https://code-sage-murex.vercel.app/api/v1';
+import API_BASE_URL from '../config/apiBaseUrl';
 
 const api = axios.create({
     baseURL: API_BASE_URL,
