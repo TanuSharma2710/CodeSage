@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
-from .db.database import engine, Base
-from .models.user import User
-from .models.debug_session import DebugSession, ErrorTracking  # Import debug models
+from db.database import engine, Base
+from models.user import User
+from models.debug_session import DebugSession, ErrorTracking  # Import debug models
 
 # Create tables if they don't exist
 Base.metadata.create_all(bind=engine)
@@ -51,3 +51,5 @@ def health_check():
     """Health check endpoint."""
     return {"status": "healthy"}
 
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
