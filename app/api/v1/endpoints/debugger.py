@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import Optional
-from app.db.session import get_db
-from app.schemas.debugger import (
+from db.session import get_db
+from schemas.debugger import (
     DebugRequest, 
     DebugResponse, 
     DebugHistoryResponse,
     DebugSessionResponse
 )
-from app.schemas.auth import TokenData
-from app.utils.security import get_current_user
-from app.services.debugger_service import debug_code, debug_code_anonymous, get_debug_history
+from schemas.auth import TokenData
+from utils.security import get_current_user
+from services.debugger_service import debug_code, debug_code_anonymous, get_debug_history
 
 router = APIRouter(prefix="/debug", tags=["Debugger"])
 

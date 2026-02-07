@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from typing import Optional
-from app.db.session import get_db
-from app.schemas.auth import TokenData
-from app.schemas.analysis import (
+from db.session import get_db
+from schemas.auth import TokenData
+from schemas.analysis import (
     RecurringErrorsResponse,
     ErrorFrequencyResponse,
     ErrorByLanguageResponse,
@@ -12,7 +12,7 @@ from app.schemas.analysis import (
     ErrorTypeBreakdownResponse,
     SessionErrorCountsResponse
 )
-from app.services.analysis_service import (
+from services.analysis_service import (
     get_recurring_errors,
     get_daily_error_frequency,
     get_error_by_language,
@@ -21,7 +21,7 @@ from app.services.analysis_service import (
     get_error_type_breakdown,
     get_session_error_counts
 )
-from app.utils.security import get_current_user
+from utils.security import get_current_user
 
 router = APIRouter(prefix="/analysis", tags=["Analysis"])
 

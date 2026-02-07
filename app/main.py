@@ -19,7 +19,7 @@ except Exception as e:
     print(f"Migration note: {e}")
 
 # Import router after DB setup
-from app.api.v1.router import router as api_router
+from api.v1.router import router as api_router
 
 app = FastAPI(
     title="CodeSage API",

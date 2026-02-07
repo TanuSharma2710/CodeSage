@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func, desc
 from datetime import datetime, date, timedelta, timezone
 from typing import List, Optional
-from app.models.debug_session import DebugSession, DailyAnalysis
-from app.schemas.analysis import (
+from models.debug_session import DebugSession, DailyAnalysis
+from schemas.analysis import (
     RecurringErrorItem,
     RecurringErrorsResponse,
     DailyErrorCount,

@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from app.db.session import get_db
-from app.schemas.study import (
+from db.session import get_db
+from schemas.study import (
     StudyRecommendationRequest,
     StudyRecommendationResponse
 )
-from app.schemas.auth import TokenData
-from app.utils.security import get_current_user
-from app.services.study_service import get_study_recommendations
+from schemas.auth import TokenData
+from utils.security import get_current_user
+from services.study_service import get_study_recommendations
 
 router = APIRouter(prefix="/study", tags=["Study"])
 

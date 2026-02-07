@@ -2,9 +2,9 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List, Optional
 import json
-from app.models.debug_session import DebugSession, ErrorTracking
-from app.schemas.debugger import DebugRequest, DebugResponse, CodeFix
-from app.services.ai_service import analyze_code
+from models.debug_session import DebugSession, ErrorTracking
+from schemas.debugger import DebugRequest, DebugResponse, CodeFix
+from services.ai_service import analyze_code
 
 
 def create_debug_session(
@@ -168,7 +168,7 @@ async def debug_code(db: Session, user_id: int, request: DebugRequest) -> DebugR
     print(f"[DEBUG] track_error called: user_id={user_id}, error_type={error_type}, error_name={error_name}")
     
     # Update daily analysis for each error type based on the session's counts
-    from app.services.analysis_service import update_daily_analysis
+    from services.analysis_service import update_daily_analysis
     
     # Call update_daily_analysis for each error type that has a count > 0
     if session.syntax_error_count > 0:

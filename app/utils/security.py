@@ -5,8 +5,8 @@ from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
-from app.config import settings
-from app.schemas.auth import TokenData
+from config import settings
+from schemas.auth import TokenData
 
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 

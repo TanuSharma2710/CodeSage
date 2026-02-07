@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
-from app.models.user import User
-from app.models.refresh_token import RefreshToken
-from app.schemas.user import UserCreate
-from app.utils.security import (
+from models.user import User
+from models.refresh_token import RefreshToken
+from schemas.user import UserCreate
+from utils.security import (
     hash_password, 
     verify_password, 
     create_access_token,
@@ -11,7 +11,7 @@ from app.utils.security import (
     verify_refresh_token
 )
 from datetime import datetime, timedelta, timezone
-from app.config import settings
+from config import settings
 import secrets
 
 

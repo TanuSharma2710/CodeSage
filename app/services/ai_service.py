@@ -6,7 +6,7 @@ from typing import Dict, List
 import httpx
 import json
 import re
-from app.config import settings
+from config import settings
 
 
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"

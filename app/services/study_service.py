@@ -3,13 +3,13 @@ Study Service for generating learning recommendations.
 This uses mock data - integrate with YouTube API and AI for production.
 """
 from typing import List
-from app.schemas.study import (
+from schemas.study import (
     Resource, 
     YouTubeVideo, 
     VideoSummary,
     StudyRecommendationResponse
 )
-from app.services.ai_service import generate_summary
+from services.ai_service import generate_summary
 
 
 # Mock resource database
