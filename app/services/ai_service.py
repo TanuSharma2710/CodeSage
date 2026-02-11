@@ -113,12 +113,13 @@ IMPORTANT: When comparing expected vs actual output, classify the root cause as 
         "messages": [
             {
                 "role": "system", 
-                "content": f"You are an expert {language} debugger. Always respond with valid JSON only. Find and fix ALL errors in the code, not just the first one. Return complete working code."
+                "content": f"""You are an expert {language} debugger. Always respond with valid JSON only.
+                               Find and fix ALL errors in the code, not just the first one.
+                               Return complete working code. Here the prompt = {prompt}"""
             },
-            {"role": "user", "content": prompt}
         ],
         "temperature": 0.1,
-        "max_tokens": 4096
+        "max_tokens": 8096
     }
     
     async with httpx.AsyncClient(timeout=90.0) as client:
