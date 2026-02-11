@@ -47,6 +47,21 @@ IMPORTANT: When comparing expected vs actual output, classify the root cause as 
 """
 
     prompt = f"""You are an expert {language} debugger. Analyze this code that has errors and fix ALL problems.
+## CRITICAL INSTRUCTIONS:
+- "fixes" MUST contain each line that was changed, with the EXACT original code and fixed code
+- EACH FIX MUST have its own "error_type" field classifying that specific error:
+  * "syntax" = missing semicolons, colons, brackets, incorrect syntax structure
+  * "type" = type mismatches like assigning string to int, wrong parameter types
+  * "runtime" = NameError, IndexError, KeyError, ValueError, AttributeError, ZeroDivisionError
+  * "import" = ImportError, ModuleNotFoundError
+  * "logical" = logic bugs, wrong conditions, infinite loops, wrong output results
+  * "other" = anything else
+- If EXPECTED OUTPUT was provided and the code produces wrong results, the issue is LOGICAL
+- "fixed_code" MUST contain the COMPLETE working program, not just changed parts
+- "changed_lines" MUST list ONLY the line numbers you actually modified (as integers)
+- The top-level "error_type" should be the most common type among all your fixes
+- Fix ALL errors, even ones not mentioned in the error message
+- Make sure the fixed code will actually compile and run correctly
 
 ## CODE WITH ERRORS:
 ```{language}
@@ -87,21 +102,7 @@ IMPORTANT: When comparing expected vs actual output, classify the root cause as 
     "error_name": "Short 5-10 word summary like 'Multiple syntax and type errors'"
 }}
 
-## CRITICAL INSTRUCTIONS:
-- "fixes" MUST contain each line that was changed, with the EXACT original code and fixed code
-- EACH FIX MUST have its own "error_type" field classifying that specific error:
-  * "syntax" = missing semicolons, colons, brackets, incorrect syntax structure
-  * "type" = type mismatches like assigning string to int, wrong parameter types
-  * "runtime" = NameError, IndexError, KeyError, ValueError, AttributeError, ZeroDivisionError
-  * "import" = ImportError, ModuleNotFoundError
-  * "logical" = logic bugs, wrong conditions, infinite loops, wrong output results
-  * "other" = anything else
-- If EXPECTED OUTPUT was provided and the code produces wrong results, the issue is LOGICAL
-- "fixed_code" MUST contain the COMPLETE working program, not just changed parts
-- "changed_lines" MUST list ONLY the line numbers you actually modified (as integers)
-- The top-level "error_type" should be the most common type among all your fixes
-- Fix ALL errors, even ones not mentioned in the error message
-- Make sure the fixed code will actually compile and run correctly"""
+"""
 
     headers = {
         "Authorization": f"Bearer {settings.groq_api_key}",
